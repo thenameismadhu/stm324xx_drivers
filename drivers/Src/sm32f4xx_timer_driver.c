@@ -28,6 +28,13 @@ void TIM_PeriClkCtrl(TIM_RegDef_t *pTIMx,uint8_t EnorDi)
 	}
 }
 
+void nvic_enable(unsigned char irq_pos) {
+	nvic_t *nvic = (nvic_t *)(NVIC_BASE);
+	unsigned char idx = irq_pos / 32;
+	unsigned char shift_by = irq_pos % 32;
+	nvic->iser[idx] = (1 << shift_by);
+}
+
 /*
  * TIMER INit
  */
@@ -52,5 +59,5 @@ void Timer_Init(TIM_Handle_t *pTIMHandle)
 
 	pTIMHandle->pTIMx->DIER = 1U;
 
-
+	//nvic_enable(TIM_IRQ_POS);
 }
